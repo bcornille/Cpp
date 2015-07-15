@@ -7,8 +7,7 @@ int main()
 
 	// Print out the value of x to the screen.
 	// This code is not deterministice, i.e. does not always give the same results.
-	std::cout << x;
-	std::cout << "\n";
+	std::cout << x << std::endl;
 
 	return 0;
 }
