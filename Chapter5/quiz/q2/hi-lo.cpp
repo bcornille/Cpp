@@ -3,6 +3,10 @@
 #include <cstdlib>
 #include <ctime>
 
+const int nguesses = 7;
+const int nummin = 1;
+const int nummax = 100;
+
 unsigned int getRandomNumber(int min, int max)
 {
 	static const double fraction = 1.0/(static_cast<double>(RAND_MAX) + 1.0);
@@ -20,8 +24,28 @@ unsigned int getGuess(int n)
 			std::cin.clear();
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
-	} while(g < 1 || g > 100);
+	} while(g < nummin || g > nummax);
 	return static_cast<unsigned int>(g);
+}
+
+void playGame(int n, int ans)
+{
+	int nguess = 0;
+	while(true) {
+		nguess++;
+		unsigned int guess = getGuess(nguess);
+		if(guess == ans) {
+			std::cout << "Correct! You win!\n";
+			return;
+		} else if(nguess >= n) {
+			std::cout << "Sorry, you lose. The correct number was " << ans << ".\n";
+			return;
+		} else if(guess < ans) {
+			std::cout << "Your guess is too low.\n";
+		} else {
+			std::cout << "Your guess is too high.\n";
+		}
+	}
 }
 
 bool playAgain()
@@ -47,28 +71,11 @@ int main()
 	srand(static_cast<unsigned int>(time(0)));
 
 	do {
-		unsigned int answer = getRandomNumber(1, 100);
-		std::cout << "Let's play a game. "						<<
-					 "I'm thinking of a number 1-100. "			<<
-					 "You have 7 tries to guess what it is.\n";
-
-		int nguess = 0;
-		while(true) {
-			nguess++;
-			unsigned int guess = getGuess(nguess);
-			if(guess == answer) {
-				std::cout << "Correct! You win!\n";
-				break;
-			} else if(nguess >= 7) {
-				std::cout << "Sorry, you lose. The correct number was " << answer << ".\n";
-				break;
-			} else if(guess < answer) {
-				std::cout << "Your guess is too low.\n";
-			} else {
-				std::cout << "Your guess is too high.\n";
-			}
-		}
-
+		unsigned int answer = getRandomNumber(nummin, nummax);
+		std::cout << "Let's play a game. "											<<
+					 "I'm thinking of a number " << nummin << "-" << nummax << ". "	<<
+					 "You have " << nguesses << " tries to guess what it is.\n";
+		playGame(nguesses, answer);
 	} while(playAgain());
 
 	std::cout << "Thank you for playing.\n";
